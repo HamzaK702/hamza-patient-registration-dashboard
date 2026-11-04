@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
+/*
+ * Palette taken from the world this tool lives in: a bakelite-dark handset,
+ * chart paper, and the amber lamp that lights on a switchboard when a line is
+ * in use. Amber is reserved throughout for the outside line — the caller, the
+ * live call, the transcript spine — so the colour always means the same thing.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* The header is the handset: bakelite dark in both themes, so the brand
+     chrome doesn't flip to a bright bar when the rest of the page goes dark. */
+  --chrome: #17191c;
+  --chrome-fg: #f4f2ee;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #faf9f7;
+  --paper-raised: #ffffff;
+  --ink: #17191c;
+  --ink-soft: #4a4e55;
+  --ink-faint: #83888f;
+  --rule: #e3dfd8;
+  --signal: #a75f0c;
+  --signal-lamp: #e9a13b;
+  --signal-wash: #fdf3e4;
+  --alert: #9a3f2c;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #121417;
+    --paper-raised: #1a1d21;
+    --ink: #edebe7;
+    --ink-soft: #a7abb1;
+    --ink-faint: #71767e;
+    --rule: #2b2f35;
+    --signal: #e9a13b;
+    --signal-lamp: #e9a13b;
+    --signal-wash: #241a0d;
+    --alert: #d98266;
   }
 }
 
+@theme inline {
+  --color-chrome: var(--chrome);
+  --color-chrome-fg: var(--chrome-fg);
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-signal: var(--signal);
+  --color-signal-lamp: var(--signal-lamp);
+  --color-signal-wash: var(--signal-wash);
+  --color-alert: var(--alert);
+
+  --font-sans: var(--font-plex-sans);
+  --font-condensed: var(--font-plex-condensed);
+  --font-mono: var(--font-plex-mono);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Data columns line up only if the digits do. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
