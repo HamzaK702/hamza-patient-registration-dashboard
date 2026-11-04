@@ -5,7 +5,9 @@
  * shows is decided by CSS from the current theme, so there is nothing to
  * hydrate differently.
  */
-export function ThemeToggle({ className = "" }: { className?: string }) {
+export function ThemeToggle({
+  className = "border-line bg-surface text-ink-soft hover:border-brand hover:text-brand",
+}: { className?: string }) {
   function toggle() {
     const root = document.documentElement;
     const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
@@ -22,7 +24,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     <button
       type="button"
       onClick={toggle}
-      className={`inline-flex h-9 w-9 items-center justify-center rounded-xl border border-line bg-surface text-ink-soft transition-colors hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${className}`}
+      className={`inline-flex h-9 w-9 items-center justify-center rounded-xl border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${className}`}
     >
       <span className="show-in-light items-center" title="Switch to dark mode">
         <span className="sr-only">Switch to dark mode</span>

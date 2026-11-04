@@ -8,13 +8,14 @@ import {
   LINK,
   PageHeading,
   TableCard,
+  TABLE,
+  TD,
   TH,
+  TR,
 } from "@/components/app-shell";
 import { IntakeLineCard } from "@/components/intake-line-card";
 import { getPatients } from "@/lib/db";
 import { formatDate, formatPhone } from "@/lib/format";
-
-const TD = "px-3 py-3.5 first:pl-5 last:pr-5";
 
 export default async function PatientsPage() {
   const patients = await getPatients();
@@ -42,8 +43,8 @@ export default async function PatientsPage() {
         </EmptyState>
       ) : (
         <TableCard>
-          <table className="w-full border-collapse text-sm">
-            <thead className="bg-surface-2/60">
+          <table className={TABLE}>
+            <thead>
               <tr>
                 <th scope="col" className={TH}>Patient</th>
                 <th scope="col" className={TH}>Date of birth</th>
@@ -56,10 +57,7 @@ export default async function PatientsPage() {
             </thead>
             <tbody>
               {patients.map((patient) => (
-                <tr
-                  key={patient.patient_id}
-                  className="border-t border-line transition-colors hover:bg-surface-2/50"
-                >
+                <tr key={patient.patient_id} className={TR}>
                   <td className={`${TD} whitespace-nowrap`}>
                     <span className="flex items-center gap-3">
                       <span

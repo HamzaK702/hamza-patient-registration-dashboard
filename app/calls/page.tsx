@@ -8,13 +8,14 @@ import {
   LINK,
   PageHeading,
   TableCard,
+  TABLE,
+  TD,
   TH,
+  TR,
 } from "@/components/app-shell";
 import { OutcomeTag } from "@/components/outcome-tag";
 import { getCalls } from "@/lib/db";
 import { formatDateTime, formatDuration, formatPhone } from "@/lib/format";
-
-const TD = "px-4 py-3.5 first:pl-5 last:pr-5 whitespace-nowrap";
 
 export default async function CallsPage() {
   const calls = await getCalls();
@@ -41,8 +42,8 @@ export default async function CallsPage() {
         </EmptyState>
       ) : (
         <TableCard>
-          <table className="w-full border-collapse text-sm">
-            <thead className="bg-surface-2/60">
+          <table className={TABLE}>
+            <thead>
               <tr>
                 <th scope="col" className={TH}>Caller</th>
                 <th scope="col" className={TH}>From</th>
@@ -55,29 +56,26 @@ export default async function CallsPage() {
             </thead>
             <tbody>
               {calls.map((call) => (
-                <tr
-                  key={call.call_id}
-                  className="border-t border-line transition-colors hover:bg-surface-2/50"
-                >
-                  <td className={`${TD} font-semibold`}>
+                <tr key={call.call_id} className={TR}>
+                  <td className={`${TD} whitespace-nowrap font-semibold`}>
                     {call.first_name ? `${call.first_name} ${call.last_name}` : "Unknown caller"}
                   </td>
-                  <td className={`${TD} tabular font-mono text-xs`}>
+                  <td className={`${TD} whitespace-nowrap tabular font-mono text-xs`}>
                     {formatPhone(call.caller_phone_number)}
                   </td>
-                  <td className={`${TD} tabular font-mono text-xs text-ink-soft`}>
+                  <td className={`${TD} whitespace-nowrap tabular font-mono text-xs text-ink-soft`}>
                     {formatDateTime(call.ended_at)}
                   </td>
-                  <td className={`${TD} tabular font-mono text-xs text-ink-soft`}>
+                  <td className={`${TD} whitespace-nowrap tabular font-mono text-xs text-ink-soft`}>
                     {formatDuration(call.started_at, call.ended_at)}
                   </td>
-                  <td className={`${TD} tabular font-mono text-xs text-ink-faint`}>
+                  <td className={`${TD} whitespace-nowrap tabular font-mono text-xs text-ink-faint`}>
                     {call.turn_count}
                   </td>
-                  <td className={TD}>
+                  <td className={`${TD} whitespace-nowrap`}>
                     <OutcomeTag outcome={call.outcome} />
                   </td>
-                  <td className={`${TD} text-right`}>
+                  <td className={`${TD} whitespace-nowrap text-right`}>
                     <Link href={`/calls/${call.call_id}`} className={LINK}>
                       View →
                     </Link>

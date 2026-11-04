@@ -11,28 +11,47 @@ const NAV: { href: "/" | "/calls"; label: string; section: Section }[] = [
   { href: "/calls", label: "Calls", section: "calls" },
 ];
 
+/** Hospital mark: a building with a cross on its tower. */
+export function HospitalMark({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M3 29V14a2 2 0 0 1 2-2h6V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v6h6a2 2 0 0 1 2 2v15z"
+      />
+      <g fill="var(--mark-cut, #fff)">
+        <rect x="14.75" y="6" width="2.5" height="7" rx=".5" />
+        <rect x="12.5" y="8.25" width="7" height="2.5" rx=".5" />
+        <rect x="6" y="16" width="3" height="3" rx=".5" />
+        <rect x="23" y="16" width="3" height="3" rx=".5" />
+        <rect x="6" y="22" width="3" height="3" rx=".5" />
+        <rect x="23" y="22" width="3" height="3" rx=".5" />
+        <path d="M13 29v-6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6z" />
+      </g>
+    </svg>
+  );
+}
+
 export function Logo() {
   return (
     <span className="flex items-center gap-3">
-      <span
-        className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-fg"
-        aria-hidden="true"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
-          <path d="M12 5v14M5 12h14" />
-        </svg>
+      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white text-brand ring-1 ring-black/5 [--mark-cut:#fff]">
+        <HospitalMark className="h-6 w-6" />
       </span>
       <span className="leading-tight">
         <span className="block font-display text-[17px] font-bold tracking-tight">
           Lakeside Family Medicine
         </span>
-        <span className="block text-xs text-ink-faint">Patient intake</span>
+        <span className="block text-xs opacity-70">Hospital &amp; clinic · patient intake</span>
       </span>
     </span>
   );
 }
 
-/** Chrome shared by every signed-in page. */
+const ON_NAV =
+  "border-white/20 bg-white/10 text-white hover:border-white/50 hover:bg-white/15";
+
+/** Chrome shared by every signed-in page: a deep-green bar with tab-style nav. */
 export function AppShell({
   current,
   children,
@@ -42,38 +61,38 @@ export function AppShell({
 }) {
   return (
     <div className="flex min-h-full flex-col">
-      <header className="sticky top-0 z-10 border-b border-line bg-surface/85 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 sm:px-6">
+      <header className="sticky top-0 z-10 bg-nav text-white shadow-card">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-2 px-4 pt-3 sm:px-6">
           <Logo />
 
-          <nav className="ml-auto flex items-center gap-1 rounded-xl bg-surface-2 p-1">
+          <div className="ml-auto flex items-center gap-2">
+            <ThemeToggle className={ON_NAV} />
+            <form action={logout}>
+              <button
+                type="submit"
+                className={`h-9 rounded-xl border px-3 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${ON_NAV}`}
+              >
+                Sign out
+              </button>
+            </form>
+          </div>
+
+          <nav className="-mb-px flex w-full gap-6">
             {NAV.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 aria-current={current === item.section ? "page" : undefined}
-                className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
+                className={`border-b-[3px] pb-2.5 pt-1 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${
                   current === item.section
-                    ? "bg-surface text-ink shadow-card"
-                    : "text-ink-soft hover:text-ink"
+                    ? "border-nav-accent text-white"
+                    : "border-transparent text-white/65 hover:text-white"
                 }`}
               >
                 {item.label}
               </Link>
             ))}
           </nav>
-
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <form action={logout}>
-              <button
-                type="submit"
-                className="h-9 rounded-xl border border-line bg-surface px-3 text-sm text-ink-soft transition-colors hover:border-ink-faint hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              >
-                Sign out
-              </button>
-            </form>
-          </div>
         </div>
       </header>
 
@@ -118,17 +137,22 @@ export function Figures({ children }: { children: ReactNode }) {
   return <dl className="mt-8 flex flex-wrap gap-4">{children}</dl>;
 }
 
-/** White rounded card that holds a data table. */
+/** Holds a data table whose rows render as separate cards. */
 export function TableCard({ children }: { children: ReactNode }) {
-  return (
-    <div className="mt-8 overflow-x-auto rounded-2xl border border-line bg-surface shadow-card">
-      {children}
-    </div>
-  );
+  return <div className="mt-8 overflow-x-auto pb-2">{children}</div>;
 }
 
+/** Table base: separated rows so each one reads as its own card. */
+export const TABLE = "w-full border-separate border-spacing-y-2 text-sm";
+
 export const TH =
-  "px-3 py-3 text-left text-xs font-medium text-ink-faint first:pl-5 last:pr-5";
+  "px-3 pb-1 text-left text-[11px] font-semibold uppercase tracking-wider text-ink-faint first:pl-5 last:pr-5";
+
+/** Cell: rows get their card look from the first/last cells' rounded borders. */
+export const TD =
+  "border-y border-line bg-surface px-3 py-3.5 transition-colors group-hover:bg-brand-soft/40 first:rounded-l-2xl first:border-l first:pl-5 last:rounded-r-2xl last:border-r last:pr-5";
+
+export const TR = "group";
 
 export const LINK =
   "inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-sm font-medium text-brand transition-colors hover:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";

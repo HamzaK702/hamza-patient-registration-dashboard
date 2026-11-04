@@ -21,6 +21,11 @@
   --live: #f0604a;
   --live-soft: #fdeae6;
   --alert: #b4442f;
+  --nav: #0b4a42;
+  --nav-accent: #5ee0a0;
+  --green: #15803d;
+  --green-strong: #0f6b32;
+  --green-fg: #ffffff;
   --shadow: 0 1px 2px rgb(20 32 40 / 0.04), 0 4px 16px rgb(20 32 40 / 0.05);
 }
 
@@ -40,6 +45,11 @@
   --live: #ff7a63;
   --live-soft: #3a1d18;
   --alert: #f08a73;
+  --nav: #0c2522;
+  --nav-accent: #4ade80;
+  --green: #166534;
+  --green-strong: #15803d;
+  --green-fg: #ecfdf3;
   --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 20px rgb(0 0 0 / 0.25);
 }
 
@@ -58,10 +68,10 @@
 @keyframes ping-soft {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--live) 50%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 55%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--live) 0%, transparent);
+    box-shadow: 0 0 0 6px color-mix(in srgb, currentColor 0%, transparent);
   }
 }
 .live-dot {
@@ -83,6 +93,11 @@
   --color-live: var(--live);
   --color-live-soft: var(--live-soft);
   --color-alert: var(--alert);
+  --color-nav: var(--nav);
+  --color-nav-accent: var(--nav-accent);
+  --color-green: var(--green);
+  --color-green-strong: var(--green-strong);
+  --color-green-fg: var(--green-fg);
   --shadow-card: var(--shadow);
 
   --font-sans: var(--font-dm-sans);
