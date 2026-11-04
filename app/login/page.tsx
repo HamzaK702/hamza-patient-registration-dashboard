@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { LoginForm } from "./login-form";
+import { Logo } from "@/components/app-shell";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getSession } from "@/lib/auth";
 
@@ -11,25 +12,17 @@ export default async function LoginPage() {
 
   return (
     <div className="flex min-h-full flex-col">
-      <div className="h-[3px] bg-signal-lamp" aria-hidden="true" />
-
-      <div className="flex justify-end px-6 pt-4">
-        <ThemeToggle className="border-rule text-ink-soft hover:border-ink-faint hover:text-ink" />
+      <div className="flex items-center justify-between px-4 pt-4 sm:px-6">
+        <Logo />
+        <ThemeToggle />
       </div>
 
-      <div className="flex flex-1 items-center justify-center px-6 py-12">
-        <div className="w-full max-w-sm">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-faint">
-            Intake line
-          </p>
-          <h1 className="mt-2 font-condensed text-4xl font-bold uppercase leading-none tracking-[0.03em]">
-            Lakeside
-            <br />
-            Family Medicine
-          </h1>
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-soft">
-            Patient records and call transcripts are behind this login. Ask the
-            practice manager if you need the details.
+      <div className="flex flex-1 items-center justify-center px-4 py-12">
+        <div className="w-full max-w-sm rounded-3xl border border-line bg-surface p-8 shadow-card">
+          <h1 className="font-display text-3xl font-bold tracking-tight">Welcome back</h1>
+          <p className="mt-2 text-sm text-ink-soft">
+            Sign in to see patient records and call transcripts. Ask the practice
+            manager if you need the details.
           </p>
 
           <LoginForm />

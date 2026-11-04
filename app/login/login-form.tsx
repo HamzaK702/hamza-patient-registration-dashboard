@@ -6,15 +6,15 @@ import { login, type LoginState } from "@/lib/actions";
 
 const INITIAL: LoginState = { error: null };
 
-const LABEL = "font-mono text-[10px] uppercase tracking-[0.18em] text-ink-faint";
+const LABEL = "text-sm font-medium text-ink-soft";
 const INPUT =
-  "mt-2 w-full border border-rule bg-paper-raised px-3 py-2.5 font-mono text-sm text-ink outline-none transition-colors focus:border-signal focus:ring-1 focus:ring-signal";
+  "mt-1.5 w-full rounded-xl border border-line bg-canvas px-3.5 py-2.5 text-sm text-ink outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/25";
 
 export function LoginForm() {
   const [state, formAction, pending] = useActionState(login, INITIAL);
 
   return (
-    <form action={formAction} className="mt-8 space-y-4">
+    <form action={formAction} className="mt-6 space-y-4">
       <div>
         <label htmlFor="username" className={LABEL}>
           Username
@@ -50,7 +50,7 @@ export function LoginForm() {
         <p
           id="login-error"
           role="alert"
-          className="border-l-2 border-alert pl-3 text-sm text-alert"
+          className="rounded-xl bg-live-soft px-3 py-2 text-sm text-alert"
         >
           {state.error}
         </p>
@@ -59,7 +59,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full bg-ink px-4 py-2.5 font-condensed text-sm font-semibold uppercase tracking-[0.14em] text-paper transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal disabled:opacity-50"
+        className="w-full rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-brand-fg transition-colors hover:bg-brand-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:opacity-50"
       >
         {pending ? "Checking…" : "Sign in"}
       </button>

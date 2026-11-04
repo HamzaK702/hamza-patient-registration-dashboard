@@ -1,76 +1,51 @@
 @import "tailwindcss";
 
 /*
- * Palette taken from the world this tool lives in: a bakelite-dark handset,
- * chart paper, and the amber lamp that lights on a switchboard when a line is
- * in use. Amber is reserved throughout for the outside line — the caller, the
- * live call, the transcript spine — so the colour always means the same thing.
+ * Calm clinic palette: cool off-white canvas, white cards, a deep teal for
+ * anything you can act on, and coral reserved for "live" (Maya's line).
+ * Light is the default; dark applies only when the viewer picks it.
  */
 :root {
-  /* The header is the handset: bakelite dark in both themes, so the brand
-     chrome doesn't flip to a bright bar when the rest of the page goes dark. */
-  --chrome: #17191c;
-  --chrome-fg: #f4f2ee;
-
-  --paper: #faf9f7;
-  --paper-raised: #ffffff;
-  --ink: #17191c;
-  --ink-soft: #4a4e55;
-  --ink-faint: #83888f;
-  --rule: #e3dfd8;
-  --signal: #a75f0c;
-  --signal-lamp: #e9a13b;
-  --signal-wash: #fdf3e4;
-  --alert: #9a3f2c;
-}
-
-/* Dark follows the OS unless the viewer picked a theme (data-theme on <html>,
-   set before paint by the script in layout.tsx). The two blocks must match. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --paper: #121417;
-    --paper-raised: #1a1d21;
-    --ink: #edebe7;
-    --ink-soft: #a7abb1;
-    --ink-faint: #8a8f96;
-    --rule: #2b2f35;
-    --signal: #e9a13b;
-    --signal-lamp: #e9a13b;
-    --signal-wash: #241a0d;
-    --alert: #d98266;
-  }
+  color-scheme: light;
+  --canvas: #f4f6f8;
+  --surface: #ffffff;
+  --surface-2: #eef2f4;
+  --ink: #142028;
+  --ink-soft: #4b5a64;
+  --ink-faint: #7f8c95;
+  --line: #e1e6ea;
+  --brand: #0d7a6f;
+  --brand-strong: #095e55;
+  --brand-soft: #e3f3f0;
+  --brand-fg: #ffffff;
+  --live: #f0604a;
+  --live-soft: #fdeae6;
+  --alert: #b4442f;
+  --shadow: 0 1px 2px rgb(20 32 40 / 0.04), 0 4px 16px rgb(20 32 40 / 0.05);
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --paper: #121417;
-  --paper-raised: #1a1d21;
-  --ink: #edebe7;
-  --ink-soft: #a7abb1;
-  --ink-faint: #8a8f96;
-  --rule: #2b2f35;
-  --signal: #e9a13b;
-  --signal-lamp: #e9a13b;
-  --signal-wash: #241a0d;
-  --alert: #d98266;
-}
-
-:root[data-theme="light"] {
-  color-scheme: light;
+  --canvas: #0e1417;
+  --surface: #151d21;
+  --surface-2: #1b252a;
+  --ink: #e6edf0;
+  --ink-soft: #a3b1b8;
+  --ink-faint: #7d8b93;
+  --line: #26323a;
+  --brand: #3cc2b1;
+  --brand-strong: #6fd8ca;
+  --brand-soft: #12302d;
+  --brand-fg: #06201d;
+  --live: #ff7a63;
+  --live-soft: #3a1d18;
+  --alert: #f08a73;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 20px rgb(0 0 0 / 0.25);
 }
 
 /* The theme toggle shows the icon for the theme you'd switch to. */
 .show-in-dark {
   display: none;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .show-in-dark {
-    display: inline-flex;
-  }
-  :root:not([data-theme="light"]) .show-in-light {
-    display: none;
-  }
 }
 :root[data-theme="dark"] .show-in-dark {
   display: inline-flex;
@@ -79,48 +54,50 @@
   display: none;
 }
 
-/* The line-in-use lamp: a slow glow, never a blink. */
-@keyframes lamp {
+/* A soft ping around the live dot. */
+@keyframes ping-soft {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--signal-lamp) 55%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--live) 50%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal-lamp) 0%, transparent);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--live) 0%, transparent);
   }
 }
-.lamp {
-  animation: lamp 2.4s ease-in-out infinite;
+.live-dot {
+  animation: ping-soft 2s ease-in-out infinite;
 }
 
 @theme inline {
-  --color-chrome: var(--chrome);
-  --color-chrome-fg: var(--chrome-fg);
-  --color-paper: var(--paper);
-  --color-paper-raised: var(--paper-raised);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-ink-faint: var(--ink-faint);
-  --color-rule: var(--rule);
-  --color-signal: var(--signal);
-  --color-signal-lamp: var(--signal-lamp);
-  --color-signal-wash: var(--signal-wash);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-fg: var(--brand-fg);
+  --color-live: var(--live);
+  --color-live-soft: var(--live-soft);
   --color-alert: var(--alert);
+  --shadow-card: var(--shadow);
 
-  --font-sans: var(--font-plex-sans);
-  --font-condensed: var(--font-plex-condensed);
-  --font-mono: var(--font-plex-mono);
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-bricolage);
+  --font-mono: var(--font-dm-mono);
 }
 
 body {
-  background: var(--paper);
+  background: var(--canvas);
   color: var(--ink);
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
 }
 
-/* Data columns line up only if the digits do. */
 .tabular {
   font-variant-numeric: tabular-nums;
 }

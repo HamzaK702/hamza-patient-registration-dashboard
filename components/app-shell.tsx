@@ -8,13 +8,31 @@ type Section = "patients" | "calls";
 
 const NAV: { href: "/" | "/calls"; label: string; section: Section }[] = [
   { href: "/", label: "Patients", section: "patients" },
-  { href: "/calls", label: "Call log", section: "calls" },
+  { href: "/calls", label: "Calls", section: "calls" },
 ];
 
-/**
- * Chrome shared by every signed-in page. The amber rule under the header is
- * the line-in-use lamp, and it reappears as the spine of a transcript.
- */
+export function Logo() {
+  return (
+    <span className="flex items-center gap-3">
+      <span
+        className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-brand-fg"
+        aria-hidden="true"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </span>
+      <span className="leading-tight">
+        <span className="block font-display text-[17px] font-bold tracking-tight">
+          Lakeside Family Medicine
+        </span>
+        <span className="block text-xs text-ink-faint">Patient intake</span>
+      </span>
+    </span>
+  );
+}
+
+/** Chrome shared by every signed-in page. */
 export function AppShell({
   current,
   children,
@@ -24,59 +42,57 @@ export function AppShell({
 }) {
   return (
     <div className="flex min-h-full flex-col">
-      <header className="bg-chrome text-chrome-fg">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-4 px-6 py-5">
-          <div>
-            <p className="flex items-center gap-2.5 font-condensed text-xl font-bold uppercase tracking-[0.09em]">
-              <span
-                className="lamp inline-block h-2 w-2 rounded-full bg-signal-lamp"
-                aria-hidden="true"
-              />
-              Lakeside Family Medicine
-            </p>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-chrome-fg/55">
-              Intake line · answered by Maya
-            </p>
-          </div>
+      <header className="sticky top-0 z-10 border-b border-line bg-surface/85 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 sm:px-6">
+          <Logo />
 
-          <nav className="ml-auto flex items-center gap-6">
+          <nav className="ml-auto flex items-center gap-1 rounded-xl bg-surface-2 p-1">
             {NAV.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 aria-current={current === item.section ? "page" : undefined}
-                className={`font-condensed text-sm font-semibold uppercase tracking-[0.12em] underline-offset-8 transition-colors hover:text-chrome-fg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal-lamp ${
+                className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
                   current === item.section
-                    ? "text-chrome-fg underline decoration-signal-lamp decoration-2"
-                    : "text-chrome-fg/60"
+                    ? "bg-surface text-ink shadow-card"
+                    : "text-ink-soft hover:text-ink"
                 }`}
               >
                 {item.label}
               </Link>
             ))}
+          </nav>
 
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
             <form action={logout}>
               <button
                 type="submit"
-                className="font-mono text-[11px] uppercase tracking-[0.16em] text-chrome-fg/50 underline-offset-4 transition-colors hover:text-chrome-fg hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-signal-lamp"
+                className="h-9 rounded-xl border border-line bg-surface px-3 text-sm text-ink-soft transition-colors hover:border-ink-faint hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
                 Sign out
               </button>
             </form>
-
-            <ThemeToggle className="border-chrome-fg/20 text-chrome-fg/70 hover:border-chrome-fg/50 hover:text-chrome-fg" />
-          </nav>
+          </div>
         </div>
       </header>
 
-      <div className="h-[3px] bg-signal-lamp" aria-hidden="true" />
-
-      <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-12">{children}</main>
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">{children}</main>
     </div>
   );
 }
 
-/** One figure in the ledger strip that heads each page; `accent` marks the headline one. */
+/** Page title block. */
+export function PageHeading({ title, lede }: { title: ReactNode; lede?: ReactNode }) {
+  return (
+    <div>
+      <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+      {lede ? <p className="mt-2 max-w-lg text-[15px] text-ink-soft">{lede}</p> : null}
+    </div>
+  );
+}
+
+/** One stat card; `accent` marks the headline one. */
 export function Figure({
   label,
   value,
@@ -88,23 +104,39 @@ export function Figure({
 }) {
   return (
     <div
-      className={`min-w-40 flex-1 border border-rule bg-paper-raised px-5 py-4 ${
-        accent ? "border-l-[3px] border-l-signal-lamp" : ""
+      className={`min-w-40 flex-1 rounded-2xl px-5 py-4 shadow-card ${
+        accent ? "bg-brand text-brand-fg" : "border border-line bg-surface"
       }`}
     >
-      <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-faint">
-        {label}
-      </dt>
-      <dd
-        className={`tabular mt-1 font-condensed text-3xl font-bold ${accent ? "text-signal" : ""}`}
-      >
-        {value}
-      </dd>
+      <dt className={`text-sm ${accent ? "opacity-80" : "text-ink-soft"}`}>{label}</dt>
+      <dd className="tabular mt-1 font-display text-4xl font-bold tracking-tight">{value}</dd>
     </div>
   );
 }
 
-/** The ledger strip itself: a row of Figure cards. */
 export function Figures({ children }: { children: ReactNode }) {
-  return <dl className="mt-8 flex flex-wrap gap-3">{children}</dl>;
+  return <dl className="mt-8 flex flex-wrap gap-4">{children}</dl>;
+}
+
+/** White rounded card that holds a data table. */
+export function TableCard({ children }: { children: ReactNode }) {
+  return (
+    <div className="mt-8 overflow-x-auto rounded-2xl border border-line bg-surface shadow-card">
+      {children}
+    </div>
+  );
+}
+
+export const TH =
+  "px-3 py-3 text-left text-xs font-medium text-ink-faint first:pl-5 last:pr-5";
+
+export const LINK =
+  "inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-sm font-medium text-brand transition-colors hover:bg-brand-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+
+export function EmptyState({ children }: { children: ReactNode }) {
+  return (
+    <p className="mt-10 rounded-2xl border border-dashed border-line bg-surface px-6 py-14 text-center text-sm text-ink-soft">
+      {children}
+    </p>
+  );
 }
