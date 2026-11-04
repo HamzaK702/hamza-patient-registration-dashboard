@@ -28,6 +28,9 @@ export function formatTime(value: string | null): string {
   });
 }
 
+/** Maya's public intake number (LiveKit), as stored: 10 digits, no country code. */
+export const INTAKE_LINE = "4844817322";
+
 /** 10-digit US numbers as stored by the agent; anything else is shown as-is. */
 export function formatPhone(value: string | null): string {
   if (!value) return "—";

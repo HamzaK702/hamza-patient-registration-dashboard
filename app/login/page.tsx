@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { LoginForm } from "./login-form";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { getSession } from "@/lib/auth";
 
 export const metadata = { title: "Sign in — Lakeside Family Medicine" };
@@ -12,7 +13,11 @@ export default async function LoginPage() {
     <div className="flex min-h-full flex-col">
       <div className="h-[3px] bg-signal-lamp" aria-hidden="true" />
 
-      <div className="flex flex-1 items-center justify-center px-6 py-16">
+      <div className="flex justify-end px-6 pt-4">
+        <ThemeToggle className="border-rule text-ink-soft hover:border-ink-faint hover:text-ink" />
+      </div>
+
+      <div className="flex flex-1 items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-faint">
             Intake line

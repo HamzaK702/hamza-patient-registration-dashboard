@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { ThemeToggle } from "@/components/theme-toggle";
 import { logout } from "@/lib/actions";
 
 type Section = "patients" | "calls";
@@ -26,7 +27,11 @@ export function AppShell({
       <header className="bg-chrome text-chrome-fg">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-4 px-6 py-5">
           <div>
-            <p className="font-condensed text-xl font-bold uppercase tracking-[0.09em]">
+            <p className="flex items-center gap-2.5 font-condensed text-xl font-bold uppercase tracking-[0.09em]">
+              <span
+                className="lamp inline-block h-2 w-2 rounded-full bg-signal-lamp"
+                aria-hidden="true"
+              />
               Lakeside Family Medicine
             </p>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-chrome-fg/55">
@@ -58,6 +63,8 @@ export function AppShell({
                 Sign out
               </button>
             </form>
+
+            <ThemeToggle className="border-chrome-fg/20 text-chrome-fg/70 hover:border-chrome-fg/50 hover:text-chrome-fg" />
           </nav>
         </div>
       </header>
@@ -69,14 +76,35 @@ export function AppShell({
   );
 }
 
-/** One figure in the ledger strip that heads each page. */
-export function Figure({ label, value }: { label: string; value: ReactNode }) {
+/** One figure in the ledger strip that heads each page; `accent` marks the headline one. */
+export function Figure({
+  label,
+  value,
+  accent = false,
+}: {
+  label: string;
+  value: ReactNode;
+  accent?: boolean;
+}) {
   return (
-    <div>
+    <div
+      className={`min-w-40 flex-1 border border-rule bg-paper-raised px-5 py-4 ${
+        accent ? "border-l-[3px] border-l-signal-lamp" : ""
+      }`}
+    >
       <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-faint">
         {label}
       </dt>
-      <dd className="tabular mt-1 font-condensed text-3xl font-bold">{value}</dd>
+      <dd
+        className={`tabular mt-1 font-condensed text-3xl font-bold ${accent ? "text-signal" : ""}`}
+      >
+        {value}
+      </dd>
     </div>
   );
+}
+
+/** The ledger strip itself: a row of Figure cards. */
+export function Figures({ children }: { children: ReactNode }) {
+  return <dl className="mt-8 flex flex-wrap gap-3">{children}</dl>;
 }

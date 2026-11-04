@@ -24,19 +24,73 @@
   --alert: #9a3f2c;
 }
 
+/* Dark follows the OS unless the viewer picked a theme (data-theme on <html>,
+   set before paint by the script in layout.tsx). The two blocks must match. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --paper: #121417;
     --paper-raised: #1a1d21;
     --ink: #edebe7;
     --ink-soft: #a7abb1;
-    --ink-faint: #71767e;
+    --ink-faint: #8a8f96;
     --rule: #2b2f35;
     --signal: #e9a13b;
     --signal-lamp: #e9a13b;
     --signal-wash: #241a0d;
     --alert: #d98266;
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #121417;
+  --paper-raised: #1a1d21;
+  --ink: #edebe7;
+  --ink-soft: #a7abb1;
+  --ink-faint: #8a8f96;
+  --rule: #2b2f35;
+  --signal: #e9a13b;
+  --signal-lamp: #e9a13b;
+  --signal-wash: #241a0d;
+  --alert: #d98266;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* The theme toggle shows the icon for the theme you'd switch to. */
+.show-in-dark {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .show-in-dark {
+    display: inline-flex;
+  }
+  :root:not([data-theme="light"]) .show-in-light {
+    display: none;
+  }
+}
+:root[data-theme="dark"] .show-in-dark {
+  display: inline-flex;
+}
+:root[data-theme="dark"] .show-in-light {
+  display: none;
+}
+
+/* The line-in-use lamp: a slow glow, never a blink. */
+@keyframes lamp {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--signal-lamp) 55%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal-lamp) 0%, transparent);
+  }
+}
+.lamp {
+  animation: lamp 2.4s ease-in-out infinite;
 }
 
 @theme inline {
@@ -61,6 +115,9 @@
 body {
   background: var(--paper);
   color: var(--ink);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 /* Data columns line up only if the digits do. */

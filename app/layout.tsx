@@ -24,6 +24,10 @@ const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
 });
 
+// Applies a saved light/dark choice before first paint; with none saved the
+// OS setting applies through the CSS media query.
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`;
+
 export const metadata: Metadata = {
   title: "Intake line — Lakeside Family Medicine",
   description: "Patient registrations and call transcripts from the intake voice agent",
@@ -34,7 +38,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${plexSans.variable} ${plexCondensed.variable} ${plexMono.variable} h-full antialiased`}
+      // The script below may set data-theme before React hydrates.
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-full font-sans">{children}</body>
     </html>
   );

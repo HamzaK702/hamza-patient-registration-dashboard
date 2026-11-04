@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { AppShell, Figure } from "@/components/app-shell";
+import { AppShell, Figure, Figures } from "@/components/app-shell";
 import { OutcomeTag } from "@/components/outcome-tag";
 import { getCalls } from "@/lib/db";
 import { formatDateTime, formatDuration, formatPhone } from "@/lib/format";
@@ -23,11 +23,11 @@ export default async function CallsPage() {
         a registration was finished.
       </p>
 
-      <dl className="mt-8 flex flex-wrap gap-x-14 gap-y-5 border-y border-rule py-5">
-        <Figure label="Calls logged" value={calls.length} />
+      <Figures>
+        <Figure label="Calls logged" value={calls.length} accent />
         <Figure label="Ended in a registration" value={registered} />
         <Figure label="Didn't finish" value={unfinished} />
-      </dl>
+      </Figures>
 
       {calls.length === 0 ? (
         <p className="mt-12 border border-dashed border-rule px-6 py-14 text-center text-sm text-ink-soft">

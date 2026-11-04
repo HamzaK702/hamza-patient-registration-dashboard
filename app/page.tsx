@@ -1,14 +1,9 @@
 import Link from "next/link";
 
-import { AppShell, Figure } from "@/components/app-shell";
-import { getPatients, type PatientRow } from "@/lib/db";
+import { AppShell, Figure, Figures } from "@/components/app-shell";
+import { IntakeLineCard } from "@/components/intake-line-card";
+import { getPatients } from "@/lib/db";
 import { formatDate, formatPhone } from "@/lib/format";
-
-function appointment(patient: PatientRow): string {
-  if (!patient.appointment_doctor || !patient.appointment_date) return "—";
-  const time = patient.appointment_time?.slice(0, 5) ?? "";
-  return `${patient.appointment_doctor} · ${formatDate(patient.appointment_date)} ${time}`;
-}
 
 const TH =
   "px-4 py-3 text-left font-mono text-[10px] font-normal uppercase tracking-[0.14em] text-ink-faint";
@@ -19,21 +14,24 @@ export default async function PatientsPage() {
 
   return (
     <AppShell current="patients">
-      <h1 className="font-condensed text-4xl font-bold uppercase tracking-[0.03em]">
-        Patients
-      </h1>
-      <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink-soft">
-        Everyone Maya has registered over the phone, newest first.
-      </p>
+      <div className="flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <h1 className="font-condensed text-4xl font-bold uppercase tracking-[0.03em]">
+            Patients
+          </h1>
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink-soft">
+            Everyone Maya has registered over the phone, newest first.
+          </p>
+        </div>
 
-      <dl className="mt-8 flex flex-wrap gap-x-14 gap-y-5 border-y border-rule py-5">
-        <Figure label="On file" value={patients.length} />
+        <IntakeLineCard />
+      </div>
+
+      <Figures>
+        <Figure label="On file" value={patients.length} accent />
         <Figure label="Appointments booked" value={booked} />
-        <Figure
-          label="Awaiting a booking"
-          value={patients.length - booked}
-        />
-      </dl>
+        <Figure label="Awaiting a booking" value={patients.length - booked} />
+      </Figures>
 
       {patients.length === 0 ? (
         <p className="mt-12 border border-dashed border-rule px-6 py-14 text-center text-sm text-ink-soft">
@@ -75,11 +73,22 @@ export default async function PatientsPage() {
                   className="border-b border-rule transition-colors hover:bg-signal-wash/60"
                 >
                   <td className="whitespace-nowrap px-4 py-3.5">
-                    <span className="font-condensed text-base font-semibold">
-                      {patient.first_name} {patient.last_name}
-                    </span>
-                    <span className="ml-2 font-mono text-[11px] uppercase tracking-wider text-ink-faint">
-                      {patient.sex}
+                    <span className="flex items-center gap-3">
+                      <span
+                        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-signal-wash font-condensed text-xs font-bold uppercase text-signal ring-1 ring-signal/25"
+                        aria-hidden="true"
+                      >
+                        {patient.first_name[0]}
+                        {patient.last_name[0]}
+                      </span>
+                      <span>
+                        <span className="font-condensed text-base font-semibold">
+                          {patient.first_name} {patient.last_name}
+                        </span>
+                        <span className="ml-2 font-mono text-[11px] uppercase tracking-wider text-ink-faint">
+                          {patient.sex}
+                        </span>
+                      </span>
                     </span>
                   </td>
                   <td className="tabular whitespace-nowrap px-4 py-3.5 font-mono text-xs text-ink-soft">
@@ -101,7 +110,19 @@ export default async function PatientsPage() {
                     {patient.city}, {patient.state} {patient.zip_code}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3.5 text-ink-soft">
-                    {appointment(patient)}
+                    {patient.appointment_doctor && patient.appointment_date ? (
+                      <span className="inline-block rounded-md border border-signal/30 bg-signal-wash px-2.5 py-1 text-xs leading-snug">
+                        <span className="block font-semibold text-ink">
+                          {patient.appointment_doctor}
+                        </span>
+                        <span className="tabular block font-mono text-[11px] text-ink-soft">
+                          {formatDate(patient.appointment_date)}{" "}
+                          {patient.appointment_time?.slice(0, 5)}
+                        </span>
+                      </span>
+                    ) : (
+                      "—"
+                    )}
                   </td>
                   <td className="tabular whitespace-nowrap px-4 py-3.5 font-mono text-xs text-ink-faint">
                     {formatDate(patient.created_at)}
@@ -112,11 +133,11 @@ export default async function PatientsPage() {
                         href={`/calls/${patient.latest_call_id}`}
                         className="font-mono text-[11px] uppercase tracking-[0.12em] text-signal underline decoration-signal/40 underline-offset-4 hover:decoration-signal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal"
                       >
-                        View transcript
+                        Transcript
                       </Link>
                     ) : (
                       <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
-                        No recording
+                        None
                       </span>
                     )}
                   </td>
